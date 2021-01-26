@@ -3,19 +3,26 @@
 #(which is an invertible square matrix)
 
 makeCacheMatrix <- function(x = matrix()) {
-  inv <- NULL
-  set <- function(y){
-    x <<- y
-    inv <<- NULL
-  }
+        ## The process initialize the inverse property
+        inv <- NULL
   
-  get <- function() x
-  
-  setInv <- function(inverse) inv <<- inverse
-  
-  getInv <- function() inv
-  
-  list(set = set, get = get, getInv = getInv, setInv = setInv)
+        ## Process to set the matrix
+        set <- function(y){
+            x <<- y
+            inv <<- NULL
+        }
+        
+        ## Process the get the matrix
+        get <- function() x
+        
+        ## Process to set the inverse of the matrix
+        setInv <- function(inverse) inv <<- inverse
+
+        ## Process to get the inverse of the matrix
+        getInv <- function() inv
+
+        ## Return a list of the processes facts
+        list(set = set, get = get, getInv = getInv, setInv = setInv)
 } 
 
 
@@ -25,18 +32,27 @@ makeCacheMatrix <- function(x = matrix()) {
 #inverse from the cache
 
 cacheSolve <- function(x, ...) {
+        
         ## Return a matrix that is the inverse of 'x'
-  inv <- x$getInv()
+        inv <- x$getInv()
+         
+        ## Return the inverse if its already set
+        if(!is.null(inv)){
+              message("getting cached result")
+              return(inv)
+        }
+        
+        ## Get the matrix from the data 
+        data <- x$get()
   
-  if(!is.null(inv)){
-    message("getting cached result")
-    return(inv)
-  }
+        ## Use matrix multiplication to get the inverse 
+        inv <- solve(data, ...)
   
-  data <- x$get()
-  inv <- solve(data, ...)
-  x$setInv(inv)
-  inv
+        ## Set the inverse
+        x$setInv(inv)
+  
+        ## return inverse matrix 
+        inv
 }
 
 # 
